@@ -10,15 +10,22 @@ interface ClimaTeste {
 export default function App() {
     const [dados, setDados] = useState<ClimaTeste | null>(null);
     const [erro, setErro] = useState<string>('');
+    const [lat, setLat] = useState<number | null>(null);
+    const [lon, setLon] = useState<number | null>(null);
 
     useEffect(() => {
         (async () => {
             try {
                 // 1. Permissão e Localização
                 const { status } = await Location.requestForegroundPermissionsAsync();
-                if (status !== 'granted') return setErro('Permissão negada.');
+                if (status !== 'granted') {
+                    return setErro('Permissão negada.');
+                }
 
                 const { coords: { latitude: lat, longitude: lon } } = await Location.getCurrentPositionAsync({});
+
+                setLat(lat);
+                setLon(lon);
 
                 // 2. Chamada da API com URL simplificada
                 const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=sunrise,sunset&timezone=auto&forecast_days=1`;
@@ -43,6 +50,9 @@ export default function App() {
             <Text style={{ fontSize: 20, marginBottom: 10 }}>Teste API + Location</Text>
             <Text>🌅 Nascer do sol: {dados.daily.sunrise[0]}</Text>
             <Text>🌇 Pôr do sol: {dados.daily.sunset[0]}</Text>
+            <Text>Aqui sua latitude e longitude:</Text>
+            <Text>Lat: {lat}</Text>
+            <Text>Lon: {lon}</Text>
         </View>
     );
 }
