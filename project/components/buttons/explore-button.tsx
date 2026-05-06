@@ -1,13 +1,15 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-
-//import {Link, useRouter} from 'expo-router'
+import { Link, useRouter } from "expo-router";
 
 export const ExploreButton = () => {
-  //const router = useRouter();
+  const router = useRouter();
 
   return (
     <View>
-      <Pressable style={estilos.ExploreButton}>
+      <Pressable
+        style={estilos.ExploreButton}
+        onPress={() => router.navigate("./login-screen")}
+      >
         <Text style={estilos.ExploreButtonText}>Explorar</Text>
       </Pressable>
     </View>

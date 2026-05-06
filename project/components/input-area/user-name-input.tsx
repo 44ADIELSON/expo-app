@@ -33,7 +33,6 @@ export const UserInput = () => {
        </View>
      </View>
 
-
      <View style={estilos.ViewAlign}>
        <View>
          <Text style={estilos.Text}>Senha</Text>
