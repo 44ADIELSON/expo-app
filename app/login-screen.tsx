@@ -1,40 +1,51 @@
-import {ImageBackground,View, StyleSheet} from 'react-native';
+import {
+  ImageBackground,
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from "react-native";
 
-import {UserInput} from '../project/components/input-area/user-name-input';
-import {EnterButton} from '../project/components/buttons/enter-button';
+import { UserInput } from "../project/components/input-area/user-name-input";
+import { EnterButton } from "../project/components/buttons/enter-button";
 
 const LoginScreen = () => {
-    return (
-        <ImageBackground
-            source={require('../assets/Gemini_Generated_Image_l7xwetl7xwetl7xw.png')}
-            style={estilos.background}
-            imageStyle={estilos.image}
-        >
-            <View style={estilos.View}>
-                <UserInput />
-                <EnterButton />
-            </View>
-        </ImageBackground>
-    );
+  return (
+    <KeyboardAvoidingView
+      style={estilos.keyboardAvoidingView}
+      behavior="padding"
+    >
+      <ImageBackground
+        source={require("../assets/Gemini_Generated_Image_l7xwetl7xwetl7xw.png")}
+        style={estilos.background}
+        imageStyle={estilos.image}
+      >
+        <View style={estilos.View}>
+          <UserInput />
+          <EnterButton />
+        </View>
+      </ImageBackground>
+    </KeyboardAvoidingView>
+  );
 };
 
 const estilos = StyleSheet.create({
-    View: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  View: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
 
-        gap: 30,
-    },
-    background: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-    },
-    image: {
-        resizeMode: 'cover',
-    },
+    gap: 30,
+  },
+  background: {
+    flex: 1,
+  },
+  image: {
+    resizeMode: "cover",
+  },
 });
 
 export default LoginScreen;
