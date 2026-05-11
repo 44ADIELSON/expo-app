@@ -6,7 +6,7 @@ import {EnterButton} from '../project/components/buttons/enter-button';
 const LoginScreen = () => {
     return (
         <ImageBackground
-            source={require('/image-background.png')}
+            source={require('../assets/Gemini_Generated_Image_l7xwetl7xwetl7xw.png')}
             style={estilos.background}
             imageStyle={estilos.image}
         >
