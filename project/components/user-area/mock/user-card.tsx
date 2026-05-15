@@ -2,11 +2,13 @@ import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 
 type User = {
-  nome: string;
-  foto: string;
+  nome?: string;
+  foto?: string;
+  lat?: number;
+  lon?: number;
 };
 
-const UserCard = ({ nome, foto }: User) => {
+const UserCard = ({ nome, foto, lat, lon }: User) => {
   const router = useRouter();
 
   return (
@@ -17,9 +19,13 @@ const UserCard = ({ nome, foto }: User) => {
       >
         <View style={estilos.View}>
           <Image style={estilos.foto} source={{ uri: foto }} />
-          <View>
-            <Text style={estilos.nome}>{nome}</Text>
-            <Text style={estilos.nome}>AQUI A LAT E LON</Text>
+          <View style={estilos.teste}>
+            <Text style={estilos.nome}>Olá, {nome}</Text>
+            <Text style={estilos.coords}>
+              {lat != null && lon != null
+                ? `${lat.toFixed(4)}, ${lon.toFixed(4)}`
+                : "Lat/Long indisponível"}
+            </Text>
           </View>
         </View>
       </Pressable>
@@ -28,9 +34,12 @@ const UserCard = ({ nome, foto }: User) => {
 };
 
 const estilos = StyleSheet.create({
+  teste:{
+    width: 200 
+  },
+
   top:{
-    flex: 1,
-    justifyContent: "center",
+    
   },
   View: {
     flex: 1,
@@ -50,10 +59,15 @@ const estilos = StyleSheet.create({
   },
   foto: {
     borderRadius: 60,
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     objectFit: "cover",
   },
+  coords: {
+  color: "#ffffff",
+  fontSize: 14,
+  marginTop: 4,
+}
 });
 
 export default UserCard;

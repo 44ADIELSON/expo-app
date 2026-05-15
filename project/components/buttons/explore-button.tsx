@@ -5,10 +5,10 @@ export const ExploreButton = () => {
   const router = useRouter();
 
   return (
-    <View>
+    <View style={estilos.View}>
       <Pressable
         style={estilos.ExploreButton}
-        onPress={() => router.navigate("./login-screen")}
+        onPress={() => router.navigate("./userHome-screen")}
       >
         <Text style={estilos.ExploreButtonText}>Explorar</Text>
       </Pressable>
@@ -17,12 +17,12 @@ export const ExploreButton = () => {
 };
 
 const estilos = StyleSheet.create({
+  View:{
+    width: '85%',
+  },
   ExploreButton: {
     alignItems: "center",
     justifyContent: "center",
-
-    width: 300,
-    height: 50,
 
     borderRadius: 100,
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
@@ -44,7 +44,7 @@ const estilos = StyleSheet.create({
     backgroundColor: "#DE9817",
   },
   ExploreButtonText: {
-    color: "#FCF7FF",
+    color: "#593D09",
     fontSize: 20,
     fontWeight: "bold",
   },

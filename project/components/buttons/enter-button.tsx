@@ -43,7 +43,7 @@ const estilos = StyleSheet.create({
     backgroundColor: "#DE9817",
   },
   EnterButtonText: {
-    color: "#FCF7FF",
+    color: "#593D09",
     fontSize: 20,
     fontWeight: "bold",
   },

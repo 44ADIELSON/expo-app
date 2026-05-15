@@ -7,6 +7,7 @@ import {
 
 import { UserInput } from "../project/components/input-area/user-name-input";
 import { EnterButton } from "../project/components/buttons/enter-button";
+import { LocationButton } from "../project/components/buttons/location-button";
 
 const LoginScreen = () => {
   return (
@@ -20,8 +21,13 @@ const LoginScreen = () => {
         imageStyle={estilos.image}
       >
         <View style={estilos.View}>
-          <UserInput />
-          <EnterButton />
+          <View>
+            <UserInput />
+          </View>
+          <View>
+            <EnterButton />
+            <LocationButton />
+          </View>
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>

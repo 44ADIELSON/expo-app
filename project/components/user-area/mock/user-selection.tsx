@@ -6,9 +6,11 @@ import UserCard from "./user-card";
 type User = {
   nome: string;
   foto: string;
+  lat: number;
+  lon: number;
 };
 
-const SelecaoPerfil = () => {
+const SelecaoPerfil = ({ lat, lon}: User) => {
   const [dados, SetDados] = useState<User[]>([]);
 
   const getUsers = async () => {
@@ -17,11 +19,10 @@ const SelecaoPerfil = () => {
         "https://randomuser.me/api/?results=1&nat=br&gender=female",
       );
       const dados = await response.json();
-      SetDados(dados);
 
       const metMAP = dados.results.map((dados: any) => {
         return {
-          nome: dados.name.first + " " + dados.name.last,
+          nome: dados.name.first, /*+ " " + dados.name.last,*/
           foto: dados.picture.large,
         };
       });
@@ -43,8 +44,8 @@ const SelecaoPerfil = () => {
           columnWrapperStyle={estilos.flatlistColum}
           data={dados}
           renderItem={({ item }: { item: User }) => (
-            <UserCard nome={item.nome} foto={item.foto} />
-          )}
+         <UserCard nome={item.nome} foto={item.foto} lat={lat} lon={lon} />
+        )}
         />
       </View>
     </View>

@@ -1,6 +1,7 @@
 import { ImageBackground, View, StyleSheet } from "react-native";
 
 import { ExploreButton } from "../project/components/buttons/explore-button";
+import {ContinueWithGoogle} from '../project/components/buttons/google-button'
 
 const WellScreen = () => {
   return (
@@ -11,6 +12,8 @@ const WellScreen = () => {
     >
       <View style={estilos.View}>
         <ExploreButton />
+
+        <ContinueWithGoogle />
       </View>
     </ImageBackground>
   );
