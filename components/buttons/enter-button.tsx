@@ -1,32 +1,31 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
+
 import { Link, useRouter } from "expo-router";
 
-export const ExploreButton = () => {
+export const EnterButton = () => {
   const router = useRouter();
 
   return (
-    <View style={estilos.View}>
+    <View>
       <Pressable
-        style={estilos.ExploreButton}
-        onPress={() => router.navigate("./userHome-screen")}
+        style={estilos.EnterButton}
+        onPress={() => router.navigate("/userHome")}
       >
-        <Text style={estilos.ExploreButtonText}>Explorar</Text>
+        <Text style={estilos.EnterButtonText}>Continuar</Text>
       </Pressable>
     </View>
   );
 };
 
 const estilos = StyleSheet.create({
-  View:{
-    width: '85%',
-  },
-  ExploreButton: {
+  EnterButton: {
     alignItems: "center",
     justifyContent: "center",
 
-    borderRadius: 100,
-    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+    minWidth: 300,
+    height: 50,
 
+    borderRadius: 20,
     elevation: 2,
 
     padding: 10,
@@ -41,10 +40,12 @@ const estilos = StyleSheet.create({
     shadowOpacity: 0.25, // rgba(0,0,0,0.25)
     shadowRadius: 1, // 1px blur
 
-    backgroundColor: "#DE9817",
+    backgroundColor: "#242440",
+
+    fontFamily: "System",
   },
-  ExploreButtonText: {
-    color: "#593D09",
+  EnterButtonText: {
+    color: "#f3f3ff",
     fontSize: 20,
     fontWeight: "bold",
   },

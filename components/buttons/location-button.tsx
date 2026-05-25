@@ -71,6 +71,8 @@ const estilos = StyleSheet.create({
     shadowRadius: 1, // 1px blur
 
     backgroundColor: "#DE9817",
+
+    fontFamily: "System",
   },
   ExploreButtonText: {
     color: "#593D09",

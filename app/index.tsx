@@ -1,9 +1,8 @@
 import React from "react";
 
-import { View, Text, StyleSheet } from "react-native";
-import { Link } from "expo-router";
+import { View, StyleSheet } from "react-native";
 
-import WellScreen from "./well-screen";
+import WellScreen from "./well";
 
 export default function Home() {
   return (
@@ -17,6 +16,6 @@ const estilos = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });
