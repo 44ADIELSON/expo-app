@@ -1,4 +1,4 @@
-import { ImageBackground, Image, View, StyleSheet } from "react-native";
+import {Image, View, StyleSheet } from "react-native";
 
 import { ExploreButton } from "../components/buttons/explore-button";
 

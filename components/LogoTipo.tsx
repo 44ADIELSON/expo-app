@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 
     minWidth: 350,
     paddingLeft: 10,
-    paddingTop: 10
+    paddingTop: 25,
   },
   Text: {
     fontSize: 20,

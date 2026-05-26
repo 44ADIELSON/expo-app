@@ -46,9 +46,11 @@ const SelecaoPerfil = () => {
 
 const estilos = StyleSheet.create({
   item: {
-    alignItems: "center",
+    alignItems: "flex-start",
     marginVertical: 8,
     fontFamily: "System",
+
+    minWidth: '100%'
   },
 });
 

@@ -7,15 +7,17 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from "react-native";
+import { LogoCreate } from "../components/LogoTipo";
+import { CustomDrawer } from "../components/input-drawer/custom-drawer";
 
 import SelecaoPerfil from "../components/user-area/mock/user-selection";
-
-import { LogoCreate } from "../components/LogoTipo";
 
 /* @hide */
 import * as Device from "expo-device";
 /* @end */
 import * as Location from "expo-location";
+
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export default function App() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -51,8 +53,7 @@ export default function App() {
 
         if (addresses && addresses.length > 0) {
           setAddress(
-            addresses[0].formattedAddress ||
-              `${addresses[0].street}, ${addresses[0].city}`,
+            `${addresses[0].subregion},${addresses[0].region},${addresses[0].country}`,
           );
         } else {
           setAddress("Endereço não encontrado.");
@@ -70,28 +71,49 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        
-        <LogoCreate iconColor="#FF9500" textColor="#ffffff" />
+      <ImageBackground
+        source={require("../assets/FUNDO-GRADIENTE.png")}
+        style={styles.background}
+      >
+        <LogoCreate iconColor="#F8B03E" textColor="#ffffff" />
+        <View style={styles.contentContainer}>
+          <View style={styles.card}>
+            {loading ? (
+              <ActivityIndicator
+                size="small"
+                color="#0000ff"
+                style={styles.loader}
+              />
+            ) : errorMsg ? (
+              <Text style={styles.errorText}>{errorMsg}</Text>
+            ) : (
+              <View style={styles.address}>
+                <Text style={styles.addressText}>{address}</Text>
+                <FontAwesome6 name="location-dot" size={20} color="#f5f5f5" />
+              </View>
+            )}
+          </View>
 
-        <View style={styles.card}>
-          {loading ? (
-            <ActivityIndicator
-              size="small"
-              color="#0000ff"
-              style={styles.loader}
-            />
-          ) : errorMsg ? (
-            <Text style={styles.errorText}>{errorMsg}</Text>
-          ) : (
-            <Text style={styles.addressText}>{address}</Text>
-          )}
+          <View style={styles.componentWrapper}>
+            <SelecaoPerfil />
+            <View style={styles.Cards}>
+              <CustomDrawer 
+              BColor="#D87825"
+              ImageWay={require('../assets/custom-drawer-sunrise.png')}
+              textInformation="Nascer do Sol"
+              timeInformation="05:31 AM"
+              durationInformation="02h 41min"
+              />
+              <CustomDrawer
+              BColor="#242440"
+              ImageWay={require('../assets/custom-drawer-sunset.png')}
+              textInformation="Pôr do Sol"
+              timeInformation="17:31"
+              durationInformation="14h 56min"/>
+            </View>
+          </View>
         </View>
-
-        <View style={styles.componentWrapper}>
-          <SelecaoPerfil />
-        </View>
-      </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -99,7 +121,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#002270",
+  },
+  address: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 15,
   },
   background: {
     flex: 1,
@@ -113,23 +139,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    backgroundColor: "#fff",
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
     marginTop: 10,
     padding: 15,
     minHeight: 50,
   },
   componentWrapper: {
-    width: "100%",
+    flexDirection: "column",
     alignItems: "center",
+
     marginTop: 20,
   },
   loader: {
@@ -137,13 +158,22 @@ const styles = StyleSheet.create({
   },
   addressText: {
     fontFamily: "System",
-    fontSize: 15,
+    fontSize: 20,
+    fontWeight: 700,
+    color: "#f5f5f5",
+
     textAlign: "center",
-    color: "#333",
   },
   errorText: {
     color: "red",
     fontSize: 14,
     textAlign: "center",
   },
+  Cards:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+    gap: 10
+  }
 });

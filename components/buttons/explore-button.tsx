@@ -12,7 +12,7 @@ export const ExploreButton = () => {
   return (
     <View style={estilos.View}>
         <TouchableOpacity
-          onPress={() => router.navigate("./Login")}
+          onPress={() => router.navigate("./login")}
           style={estilos.ExploreButton}
           activeOpacity={0.7}
         >
