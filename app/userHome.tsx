@@ -8,9 +8,9 @@ import {
   ImageBackground,
 } from "react-native";
 
-import {VisibilityCard} from '../components/input-drawer/drawer'
-
 import SelecaoPerfil from "../components/user-area/mock/user-selection";
+
+import { LogoCreate } from "../components/LogoTipo";
 
 /* @hide */
 import * as Device from "expo-device";
@@ -70,38 +70,28 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/Gemini_Generated_Image_l7xwetl7xwetl7xw.png")}
-        style={styles.background}
-        imageStyle={styles.image}
-      >
-        <View style={styles.contentContainer}>
-          
-          {/* Bloco Isolado da Localização (No topo) */}
-          <View style={styles.card}>
-            {loading ? (
-              // Enquanto o GPS carrega, exibe o indicador só aqui dentro do card
-              <ActivityIndicator size="small" color="#0000ff" style={styles.loader} />
-            ) : errorMsg ? (
-              <Text style={styles.errorText}>{errorMsg}</Text>
-            ) : (
-              <Text style={styles.addressText}>{address}</Text>
-            )}
-          </View>
+      <View style={styles.contentContainer}>
+        
+        <LogoCreate iconColor="#FF9500" textColor="#ffffff" />
 
-          {/* Componentes Fixos Estáticos (Carregam no tempo zero da tela) */}
-          <View style={styles.componentWrapper}>
-            <SelecaoPerfil />
-          </View>
-
-          <View>
-            <VisibilityCard/>
-          </View>
-          {/* <OutroComponente /> */}
-          {/* <MaisUmComponente /> */}
-
+        <View style={styles.card}>
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              color="#0000ff"
+              style={styles.loader}
+            />
+          ) : errorMsg ? (
+            <Text style={styles.errorText}>{errorMsg}</Text>
+          ) : (
+            <Text style={styles.addressText}>{address}</Text>
+          )}
         </View>
-      </ImageBackground>
+
+        <View style={styles.componentWrapper}>
+          <SelecaoPerfil />
+        </View>
+      </View>
     </View>
   );
 }
@@ -109,16 +99,13 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#002270",
   },
   background: {
     flex: 1,
     width: "100%",
     height: "100%",
     alignItems: "center",
-  },
-  image: {
-    resizeMode: "cover",
   },
   contentContainer: {
     flex: 1,
@@ -137,13 +124,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     marginTop: 10,
-    padding: 15, // Padding unificado para manter a estrutura do card idêntica com texto ou loader
-    minHeight: 50, // Evita que o card "pisque" mudando drasticamente de tamanho ao carregar
+    padding: 15,
+    minHeight: 50,
   },
   componentWrapper: {
     width: "100%",
     alignItems: "center",
-    marginTop: 20, // Espaçamento entre o card do topo e os novos elementos
+    marginTop: 20,
   },
   loader: {
     padding: 5,

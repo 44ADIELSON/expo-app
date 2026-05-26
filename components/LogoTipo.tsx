@@ -2,11 +2,16 @@ import { View, Text, StyleSheet } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export const LogoCreate = () => {
+interface TypeLogoCreate {
+  iconColor?: string;
+  textColor?: string;
+}
+
+export const LogoCreate = ({iconColor, textColor}: TypeLogoCreate) => {
   return (
     <View style={styles.View}>
-      <Ionicons name="sunny" size={30} color="black" />
-      <Text style={styles.Text}>SOLARIS</Text>
+      <Ionicons name="sunny" size={30} color={iconColor} />
+      <Text style={[styles.Text, { color: textColor }]}>SOLARIS</Text>
     </View>
   );
 };
@@ -19,7 +24,8 @@ const styles = StyleSheet.create({
     gap: 20,
 
     minWidth: 350,
-    paddingLeft: 10
+    paddingLeft: 10,
+    paddingTop: 10
   },
   Text: {
     fontSize: 20,

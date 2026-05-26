@@ -1,71 +1,75 @@
 import {
-  ImageBackground,
   View,
-  Text,
   StyleSheet,
   KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 
 import { UserInput } from "../components/input-area/user-name-input";
 import { EnterButton } from "../components/buttons/enter-button";
 import { ContinueWithGoogle } from "../components/buttons/google-button";
 import { LogoCreate } from "../components/LogoTipo";
-import {DivisorContainer} from '../components/divisor-container'
+import { DivisorContainer } from "../components/divisor-container";
+
 
 const LoginScreen = () => {
+  const color = 'black';
+
   return (
     <KeyboardAvoidingView
-      style={styles.keyboardAvoidingView}
-      behavior="padding"
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.View}>
-        <View style={styles.Topo}>
-          <LogoCreate />
-        </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.topo}>
+            <LogoCreate iconColor="#000000" textColor="#000000" />
+          </View>
 
-        <View style={styles.Corpo}>
-          <View style={styles.Header}>
+          <View style={styles.corpo}>
             <ContinueWithGoogle />
-          </View>
 
-          <DivisorContainer />
+            <DivisorContainer />
 
-          <View style={styles.UserPoint}>
-            <UserInput />
-            <EnterButton />
+            <View style={styles.formGroup}>
+              <UserInput />
+              <EnterButton />
+            </View>
           </View>
-        </View>
-      </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
+  container: {
     flex: 1,
-  },
-  Topo: {
-    marginTop: 10,
-    marginBottom: 100,
-  },
-  View: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flexDirection: "column",
-
     backgroundColor: "#EFEEEA",
   },
-  UserPoint: {
-    gap: 20,
+  scrollContainer: {
+    justifyContent: "flex-start", 
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    alignItems: 'center'   
   },
-  Corpo: {
-    flexDirection: "column",
-    justifyContent: "space-between",
+  topo: {
+    alignItems: "center",
+    marginBottom: 90,             
   },
-  Header: {
-    marginBottom: 50,
-  }
+  corpo: {
+    gap: 24,                     
+  },
+  formGroup: {
+    gap: 16,                     
+  },
 });
 
 export default LoginScreen;

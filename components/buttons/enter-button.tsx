@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 export const EnterButton = () => {
   const router = useRouter();

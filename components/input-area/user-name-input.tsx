@@ -1,24 +1,36 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, StyleSheet, TextInput } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export const UserInput = () => {
   return (
-    <View style={estilos.ViewAll}>
-        <View style={estilos.ViewInput}>
-          <TextInput
-            style={estilos.input}
-            placeholder="Endereço de e-mail"
-            placeholderTextColor="#848484"
-            underlineColorAndroid="transparent"
-          />
-        </View>
+    <View style={styles.ViewAll}>
+      <View style={styles.ViewInput}>
+        <TextInput
+          style={styles.input}
+          placeholder="Endereço de e-mail"
+          placeholderTextColor="#848484"
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      <View style={styles.ViewInput}>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite sua senha"
+          secureTextEntry={true}
+          autoCapitalize="none"
+          autoCorrect={false}
+          textContentType="password"
+          placeholderTextColor="#848484"
+          underlineColorAndroid="transparent"
+        />
+      </View>
     </View>
   );
 };
 
-const estilos = StyleSheet.create({
+const styles = StyleSheet.create({
   ViewAll: {
     flexDirection: "column",
     alignItems: "center",
@@ -44,9 +56,9 @@ const estilos = StyleSheet.create({
     elevation: 2,
 
     minWidth: 330,
-    minHeight:40,
+    minHeight: 40,
 
-    paddingLeft: 20
+    paddingLeft: 20,
   },
 
   IconRotate: {
