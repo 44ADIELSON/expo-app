@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 
-type User = {
+interface User  {
   nome?: string;
   foto?: string;
 };

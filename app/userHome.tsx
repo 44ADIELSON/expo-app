@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { LogoCreate } from "../components/LogoTipo";
 import { CustomDrawer } from "../components/input-drawer/custom-drawer";
+import { NewDateComponent } from "../components/new-date-component";
 
 import SelecaoPerfil from "../components/user-area/mock/user-selection";
 
@@ -88,8 +89,17 @@ export default function App() {
               <Text style={styles.errorText}>{errorMsg}</Text>
             ) : (
               <View style={styles.address}>
-                <Text style={styles.addressText}>{address}</Text>
-                <FontAwesome6 name="location-dot" size={20} color="#f5f5f5" />
+                <View
+                  style={[
+                    { flexDirection: "row", gap: 15, alignItems: "center" },
+                  ]}
+                >
+                  <Text style={styles.addressText}>{address}</Text>
+                  <FontAwesome6 name="location-dot" size={20} color="#f5f5f5" />
+                </View>
+                <View>
+                  <NewDateComponent />
+                </View>
               </View>
             )}
           </View>
@@ -97,19 +107,20 @@ export default function App() {
           <View style={styles.componentWrapper}>
             <SelecaoPerfil />
             <View style={styles.Cards}>
-              <CustomDrawer 
-              BColor="#D87825"
-              ImageWay={require('../assets/custom-drawer-sunrise.png')}
-              textInformation="Nascer do Sol"
-              timeInformation="05:31 AM"
-              durationInformation="02h 41min"
+              <CustomDrawer
+                bgImage={require("../assets/bg-card.png")}
+                ImageWay={require("../assets/custom-drawer-sunrise.png")}
+                textInformation="Nascer do Sol"
+                timeInformation="05:31 AM"
+                durationInformation="02h 41min"
               />
               <CustomDrawer
-              BColor="#242440"
-              ImageWay={require('../assets/custom-drawer-sunset.png')}
-              textInformation="Pôr do Sol"
-              timeInformation="17:31"
-              durationInformation="14h 56min"/>
+                BColor="#242440"
+                ImageWay={require("../assets/custom-drawer-sunset.png")}
+                textInformation="Pôr do Sol"
+                timeInformation="17:31"
+                durationInformation="14h 56min"
+              />
             </View>
           </View>
         </View>
@@ -124,8 +135,7 @@ const styles = StyleSheet.create({
   },
   address: {
     alignItems: "center",
-    flexDirection: "row",
-    gap: 15,
+    flexDirection: "column",
   },
   background: {
     flex: 1,
@@ -150,8 +160,6 @@ const styles = StyleSheet.create({
   componentWrapper: {
     flexDirection: "column",
     alignItems: "center",
-
-    marginTop: 20,
   },
   loader: {
     padding: 5,
@@ -169,11 +177,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
   },
-  Cards:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    
-    gap: 10
-  }
+  Cards: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+
+    gap: 10,
+  },
 });

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
 
 import { ImageSourcePropType } from "react-native";
 
@@ -8,6 +8,7 @@ interface TypeCustomDrawer {
   textInformation?: string;
   timeInformation?: string;
   durationInformation?: string;
+  bgImage?: ImageSourcePropType;
 }
 
 export const CustomDrawer = ({
@@ -16,18 +17,22 @@ export const CustomDrawer = ({
   textInformation,
   timeInformation,
   durationInformation,
+  bgImage,
 }: TypeCustomDrawer) => {
   return (
-    <View style={[styles.View, { backgroundColor: BColor }]}>
-      <Image
-        /*source={require("../../assets/custom-drawer-sunrise.png")}*/
-        source={ImageWay}
-        style={styles.image}
-      />
-      <Text style={styles.Text}>{textInformation}</Text>
-      <Text style={styles.Text}>{timeInformation}</Text>
-      <Text style={styles.text}>Tempo até: {durationInformation}</Text>
-    </View>
+    <ImageBackground
+      source={bgImage}
+      style={styles.bgImage}
+      resizeMode="cover"
+      imageStyle={styles.bgImageInternal}
+    >
+      <View style={[styles.View, { backgroundColor: BColor }]}>
+        <Image source={ImageWay} style={styles.image} />
+        <Text style={styles.Text}>{textInformation}</Text>
+        <Text style={styles.Text}>{timeInformation}</Text>
+        <Text style={styles.text}>Tempo até: {durationInformation}</Text>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -35,27 +40,35 @@ const styles = StyleSheet.create({
   View: {
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     borderRadius: 20,
     padding: 10,
 
     width: 160,
-    height: 190
+    height: 150,
   },
   image: {
     resizeMode: "cover",
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
   },
   Text: {
     fontFamily: "System",
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: 700,
     color: "#f5f5f5",
   },
   text: {
-    fontSize: 15,
+    fontSize: 11,
     fontWeight: 300,
     color: "#f5f5f5",
+  },
+  bgImage: {
+    alignItems: "center",
+    width: 160,
+    height: 150,
+  },
+  bgImageInternal: {
+    borderRadius: 20,
   },
 });
