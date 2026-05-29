@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { Link, useRouter } from "expo-router";
+import {useRouter} from "expo-router";
 
 export const ExploreButton = () => {
   const router = useRouter();
@@ -35,7 +35,7 @@ const estilos = StyleSheet.create({
     paddingHorizontal: 24,
     minWidth: 330,
 
-    borderRadius: 20,
+    borderRadius: 15,
 
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     shadowColor: "#000",
@@ -51,5 +51,6 @@ const estilos = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     fontFamily: "System",
+    letterSpacing: 5
   },
 });

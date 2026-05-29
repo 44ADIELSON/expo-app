@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start", 
     paddingHorizontal: 24,
     paddingBottom: 24,
-    alignItems: 'center'   
+    alignItems: 'center',   
   },
   topo: {
     alignItems: "center",

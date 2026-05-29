@@ -45,9 +45,9 @@ const estilos = StyleSheet.create({
     fontSize: 20,
   },
   foto: {
-    borderRadius: 60,
-    width: 80,
-    height: 80,
+    borderRadius: 100,
+    width: 50,
+    height: 50,
     objectFit: "cover",
   },
 });

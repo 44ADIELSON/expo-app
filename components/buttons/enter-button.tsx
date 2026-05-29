@@ -11,7 +11,7 @@ export const EnterButton = () => {
         style={estilos.EnterButton}
         onPress={() => router.navigate("/userHome")}
       >
-        <Text style={estilos.EnterButtonText}>Continuar</Text>
+        <Text style={estilos.EnterButtonText}>Entrar</Text>
       </Pressable>
     </View>
   );
@@ -25,7 +25,7 @@ const estilos = StyleSheet.create({
     minWidth: 300,
     height: 50,
 
-    borderRadius: 20,
+    borderRadius: 15,
     elevation: 2,
 
     padding: 10,
@@ -48,5 +48,6 @@ const estilos = StyleSheet.create({
     color: "#f3f3ff",
     fontSize: 20,
     fontWeight: "bold",
+    letterSpacing: 5
   },
 });

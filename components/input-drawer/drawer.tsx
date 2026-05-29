@@ -1,137 +1,271 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
 
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import Feather from "@expo/vector-icons/Feather";
 
-export const VisibilityCard = () => {
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ViewStyle, ScrollView } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+type Props = {
+  latitude?: number;
+  longitude?: number;
+  style?: ViewStyle;
+};
+
+export const VisibilityOptions: React.FC<Props> = ({ latitude = -9.48, longitude = -35.84, style }) => {
+  const [mode, setMode] = useState<'sunrise' | 'sunset'>('sunrise');
+  const [loading, setLoading] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(() => (new Date().getDay() + 6) % 7);
+  const [sunriseTime, setSunriseTime] = useState<string | null>(null);
+  const [sunsetTime, setSunsetTime] = useState<string | null>(null);
+  const [iconsForDays, setIconsForDays] = useState<string[] | null>(null);
+
+  const days = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
+
+  useEffect(() => {
+    // Busca os horários ao montar e quando as coordenadas mudam
+    fetchSunTimes();
+  }, [latitude, longitude]);
+
+  useEffect(() => {
+    // pequeno loading visual ao alternar modo
+    setLoading(true);
+    const t = setTimeout(() => setLoading(false), 300);
+    return () => clearTimeout(t);
+  }, [mode]);
+
+  const fetchSunTimes = async () => {
+    try {
+      setLoading(true);
+      const url = new URL('/v1/forecast', 'https://api.open-meteo.com');
+      url.searchParams.set('latitude', String(latitude));
+      url.searchParams.set('longitude', String(longitude));
+      url.searchParams.set('daily', 'sunrise,sunset,weathercode');
+      url.searchParams.set('timezone', 'auto');
+      url.searchParams.set('forecast_days', '7');
+
+      const res = await fetch(url.href);
+      const dados = await res.json();
+
+      console.log('Open-Meteo daily:', dados?.daily);
+
+      const NascerArray = dados?.daily?.sunrise ?? [];
+      const PorArray = dados?.daily?.sunset ?? [];
+      const rawWCodes = dados?.daily?.weathercode ?? [];
+      console.log('raw weathercode:', rawWCodes);
+      const WCodes: number[] = (rawWCodes || []).map((v: any) => Number(v)).filter((n: number) => Number.isFinite(n));
+
+      const now = new Date();
+
+      const parseISOToLocal = (iso: string) => {
+        const [datePart, timePartWithZone] = iso.split('T');
+        if (!datePart || !timePartWithZone) return null;
+        const timePart = timePartWithZone.split(/[+-]/)[0].replace(/Z$/, '');
+        const [year, month, day] = datePart.split('-').map(Number);
+        const [hourStr, minuteStr] = timePart.split(':');
+        const hour = Number(hourStr);
+        const minute = Number(minuteStr);
+        return new Date(year, month - 1, day, isNaN(hour) ? 0 : hour, isNaN(minute) ? 0 : minute);
+      };
+
+      const findNext = (arr: string[]) => {
+        for (let iso of arr) {
+          const d = parseISOToLocal(iso);
+          if (!d) continue;
+          if (d.getTime() > now.getTime()) return d;
+        }
+        if (arr.length > 0) return parseISOToLocal(arr[0]);
+        return null;
+      };
+
+      const nextSunriseDate = findNext(NascerArray);
+      const nextSunsetDate = findNext(PorArray);
+
+      const formatFromDate = (d: Date) => {
+        const hours = d.getHours();
+        const minutes = d.getMinutes();
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+      };
+
+      if (nextSunriseDate) setSunriseTime(formatFromDate(nextSunriseDate));
+      if (nextSunsetDate) setSunsetTime(formatFromDate(nextSunsetDate));
+
+      // map weather codes to icons for the upcoming days
+      const mapCodeToIcon = (code: number) => {
+        // Based on WMO weather interpretation codes
+        // Use generic, valid MaterialCommunityIcons names
+        if (code === 0) return 'weather-sunny';
+        if (code === 1 || code === 2) return 'weather-partly-cloudy';
+        if (code === 3) return 'weather-cloudy';
+        if (code >= 45 && code <= 48) return 'weather-fog';
+        // drizzle/light rain -> use generic rainy icon
+        if (code >= 51 && code <= 57) return 'weather-rainy';
+        if (code >= 61 && code <= 67) return 'weather-rainy';
+        if (code >= 71 && code <= 77) return 'weather-snowy';
+        if (code >= 80 && code <= 82) return 'weather-pouring';
+        if (code >= 95 && code <= 99) return 'weather-lightning-rainy';
+        return 'weather-cloudy';
+      };
+
+      if (WCodes && WCodes.length > 0) {
+        const icons = WCodes.slice(0, days.length).map((c) => mapCodeToIcon(c));
+        // if fewer codes than days, fill with default icons
+        while (icons.length < days.length) icons.push('weather-cloudy');
+        console.log('mapped icons:', icons);
+        setIconsForDays(icons);
+      } else {
+        console.log('no weathercodes or empty array');
+      }
+    } catch (error) {
+      console.log('Erro fetchSunTimes:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const visibilityInfo =
+    mode === 'sunrise'
+      ? sunriseTime
+        ? `Nascer do sol: ${sunriseTime}`
+        : 'Horário do nascer do sol indisponível'
+      : sunsetTime
+      ? `Pôr do sol: ${sunsetTime}`
+      : 'Horário do pôr do sol indisponível';
+
+  const dayIcons = ['weather-cloudy', 'weather-rainy', 'weather-pouring', 'weather-partly-rainy', 'weather-sunny', 'weather-night', 'weather-sunset'];
+
   return (
-    <View>
-      <View style={styles.cardContainer}>
-        {/* Bloco Superior */}
-        <View style={styles.topBlock}>
-          <Text style={styles.visibleTime}>[VISIBLE TIME]</Text>
-        </View>
+    <View style={[styles.container, style]}>
+      <View style={styles.segment}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={[styles.segmentButton, mode === 'sunrise' ? styles.segmentActive : styles.segmentInactive]}
+          onPress={() => setMode('sunrise')}
+        >
+          <Text style={[styles.segmentText, mode === 'sunrise' ? styles.segmentTextActive : styles.segmentTextInactive]}>Nascer do sol</Text>
+        </TouchableOpacity>
 
-        {/* Bloco Intermediário */}
-        <View style={styles.middleBlock}>
-          <Text style={styles.sunRowText}>Nascer do Sol amanhã: [TIME]</Text>
-          <Text style={styles.sunRowText}>Por do sol hoje: [TIME]</Text>
-        </View>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={[styles.segmentButton, mode === 'sunset' ? styles.segmentActive : styles.segmentInactive]}
+          onPress={() => setMode('sunset')}
+        >
+          <Text style={[styles.segmentText, mode === 'sunset' ? styles.segmentTextActive : styles.segmentTextInactive]}>Pôr do sol</Text>
+        </TouchableOpacity>
+      </View>
 
-        {/* Bloco Inferior */}
-        <View style={styles.bottomBlock}>
-          {/* Linha 1 */}
-          <View style={styles.metricRow}>
-            <View style={styles.metricLeftGroup}>
-              {/* Substitua pelo seu componente de ícone ou Image */}
-              <FontAwesome5
-                name="cloud"
+      <View style={styles.card}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.daysRow}>
+          {days.map((d, i) => (
+            <TouchableOpacity
+              key={d}
+              style={[styles.dayItem, i === selectedDay ? styles.dayItemSelected : null]}
+              onPress={() => setSelectedDay(i)}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.dayLabel, i === selectedDay ? styles.dayLabelSelected : null]}>{d}</Text>
+              <MaterialCommunityIcons
+                name={(iconsForDays && iconsForDays[i]) ? iconsForDays[i] as any : dayIcons[i] as any}
                 size={18}
-                color="white"
-                style={styles.icon}
+                color={i === selectedDay ? '#FFFFFF' : 'rgba(255,255,255,0.6)'}
               />
-              <Text style={styles.metricLabel}>Coberta de Nuvens</Text>
-            </View>
-            <Text style={styles.metricValue}>[%]</Text>
-          </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
-          {/* Linha 2 */}
-          <View style={styles.metricRow}>
-            <View style={styles.metricLeftGroup}>
-              <Feather
-                name="wind"
-                size={18}
-                color="white"
-                style={styles.icon}
-              />
-              <Text style={styles.metricLabel}>Qualidade do Ar</Text>
-            </View>
-            <Text style={styles.metricValue}>[goog]</Text>
-          </View>
-
-          {/* Linha 3 */}
-          <View style={styles.metricRow}>
-            <View style={styles.metricLeftGroup}>
-              <FontAwesome5
-                name="cloud-showers-heavy"
-                size={18}
-                color="white"
-                style={styles.icon}
-              />
-              <Text style={styles.metricLabel}>Previsão de Chuva</Text>
-            </View>
-            <Text style={styles.metricValue}>[%]</Text>
-          </View>
-        </View>
+      <View style={styles.infoRow}>
+        {loading ? (
+          <ActivityIndicator animating size={20} color="#ffffff" />
+        ) : (
+          <Text style={styles.infoText}>{visibilityInfo}</Text>
+        )}
       </View>
     </View>
   );
 };
 
-export const styles = StyleSheet.create({
-  cardContainer: {
-    fontFamily: "System",
-    width: "100%",
-
-    backgroundColor: "rgba(44, 36, 32, 0.75)",
-    borderRadius: 24,
-    paddingHorizontal: 24,
-    paddingVertical: 32,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    paddingHorizontal: 12,
+    flexDirection: 'column',
   },
-
-  topBlock: {
-    alignItems: "center",
+  segment: {
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 12,
   },
-
-  visibleTime: {
-    color: "#FFFFFF",
-    fontSize: 26,
-    fontWeight: "bold",
-    letterSpacing: 1,
-    textAlign: "center",
+  segmentButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-
-  middleBlock: {
-    alignItems: "flex-start",
+  segmentActive: {
+    backgroundColor: '#FFFFFF',
   },
-  sunRowText: {
-    color: "#E0E0E0",
-    fontSize: 18,
-    marginVertical: 6,
+  segmentInactive: {
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
-
-  bottomBlock: {
-    width: "100%",
+  segmentText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
-  metricRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
+  segmentTextActive: {
+    color: '#1f1f1f',
   },
-  metricLeftGroup: {
-    flexDirection: "row",
-    alignItems: "center",
+  segmentTextInactive: {
+    color: 'rgba(255,255,255,0.9)',
   },
-  icon: {
-    width: 24,
-    height: 24,
-    marginRight: 16,
-    tintColor: "#FFFFFF",
+  card: {
+    backgroundColor: '#191919',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
   },
-  metricLabel: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "400",
+  daysRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  metricValue: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "500",
+  dayItem: {
+    alignItems: 'center',
+    width: 56,
+    paddingVertical: 8,
+    marginHorizontal: 6,
+    borderRadius: 8,
+  },
+  dayItemSelected: {
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    shadowColor: '#000',
+  },
+  dayLabel: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 12,
+    marginBottom: 6,
+  },
+  dayLabelSelected: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+  iconPlaceholder: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+  },
+  iconSelected: {
+    backgroundColor: '#ffffff',
+  },
+  infoRow: {
+    paddingVertical: 8,
+    paddingHorizontal: 6,
+    alignItems: 'flex-start',
+  },
+  infoText: {
+    color: 'rgba(255,255,255,0.95)',
+    fontSize: 13,
   },
 });

@@ -8,8 +8,9 @@ import {
   ImageBackground,
 } from "react-native";
 import { LogoCreate } from "../components/LogoTipo";
-import { CustomDrawer } from "../components/input-drawer/custom-drawer";
+import { CustomDrawer, VisibilityOptions } from "../components/input-drawer/custom-drawer";
 import { NewDateComponent } from "../components/new-date-component";
+import { ExitButton } from "../components/buttons/exit-button";
 
 import SelecaoPerfil from "../components/user-area/mock/user-selection";
 
@@ -23,6 +24,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 export default function App() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(null);
+  const [coords, setCoords] = useState<{ latitude: number; longitude: number } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -46,6 +48,11 @@ export default function App() {
         }
 
         let currentLocation = await Location.getCurrentPositionAsync({});
+
+        setCoords({
+          latitude: currentLocation.coords.latitude,
+          longitude: currentLocation.coords.longitude,
+        });
 
         let addresses = await Location.reverseGeocodeAsync({
           latitude: currentLocation.coords.latitude,
@@ -76,7 +83,13 @@ export default function App() {
         source={require("../assets/FUNDO-GRADIENTE.png")}
         style={styles.background}
       >
-        <LogoCreate iconColor="#F8B03E" textColor="#ffffff" />
+        <View style={[{ marginTop: 25 }]}>
+          <LogoCreate iconColor="#F8B03E" textColor="#ffffff" />
+        </View>
+        <View style={[styles.ViewTop, { flexDirection: "row" }]}>
+          <SelecaoPerfil />
+          <ExitButton />
+        </View>
         <View style={styles.contentContainer}>
           <View style={styles.card}>
             {loading ? (
@@ -105,23 +118,33 @@ export default function App() {
           </View>
 
           <View style={styles.componentWrapper}>
-            <SelecaoPerfil />
             <View style={styles.Cards}>
-              <CustomDrawer
-                bgImage={require("../assets/bg-card.png")}
-                ImageWay={require("../assets/custom-drawer-sunrise.png")}
-                textInformation="Nascer do Sol"
-                timeInformation="05:31 AM"
-                durationInformation="02h 41min"
-              />
-              <CustomDrawer
-                BColor="#242440"
-                ImageWay={require("../assets/custom-drawer-sunset.png")}
-                textInformation="Pôr do Sol"
-                timeInformation="17:31"
-                durationInformation="14h 56min"
-              />
+                <CustomDrawer
+                  bgImage={require("../assets/bg-card.png")}
+                  ImageWay={require("../assets/custom-drawer-sunrise.png")}
+                  textInformation="Nascer do Sol"
+                  
+                  latitude={coords?.latitude}
+                  longitude={coords?.longitude}
+                />
+                <CustomDrawer
+                  BColor="#242440"
+                  ImageWay={require("../assets/custom-drawer-sunset.png")}
+                  textInformation="Pôr do Sol"
+                  
+                  latitude={coords?.latitude}
+                  longitude={coords?.longitude}
+                />
             </View>
+
+            <View>
+              <Text style={[{letterSpacing: 6, color: "#f3f3ff",}]}>Quadro de Visibilidade</Text>
+            </View>
+            <VisibilityOptions
+              latitude={coords?.latitude}
+              longitude={coords?.longitude}
+              style={{ width: 320, marginTop: 8 }}
+            />
           </View>
         </View>
       </ImageBackground>
@@ -132,6 +155,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  ViewTop: {
+    alignItems: "center",
+    justifyContent: "space-between",
+
+    padding: 5,
+
+    minWidth: "100%",
   },
   address: {
     alignItems: "center",
@@ -160,6 +191,8 @@ const styles = StyleSheet.create({
   componentWrapper: {
     flexDirection: "column",
     alignItems: "center",
+
+    gap: 35
   },
   loader: {
     padding: 5,
