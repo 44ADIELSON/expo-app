@@ -61,7 +61,7 @@ export default function App() {
 
         if (addresses && addresses.length > 0) {
           setAddress(
-            `${addresses[0].subregion},${addresses[0].region},${addresses[0].country}`,
+            `${addresses[0].subregion}, ${addresses[0].region},${addresses[0].country}`,
           );
         } else {
           setAddress("Endereço não encontrado.");
@@ -167,6 +167,8 @@ const styles = StyleSheet.create({
   address: {
     alignItems: "center",
     flexDirection: "column",
+
+
   },
   background: {
     flex: 1,

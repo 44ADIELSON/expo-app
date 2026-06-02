@@ -10,10 +10,9 @@ import {
 
 import { UserInput } from "../components/input-area/user-name-input";
 import { EnterButton } from "../components/buttons/enter-button";
-import { ContinueWithGoogle } from "../components/buttons/google-button";
 import { LogoCreate } from "../components/LogoTipo";
-import { DivisorContainer } from "../components/divisor-container";
-
+import {ForgotPassword} from '../components/buttons/forgot-password'
+import {NewUser} from '../components/buttons/new-user'
 
 const LoginScreen = () => {
   const color = 'black';
@@ -34,13 +33,11 @@ const LoginScreen = () => {
           </View>
 
           <View style={styles.corpo}>
-            <ContinueWithGoogle />
-
-            <DivisorContainer />
-
             <View style={styles.formGroup}>
               <UserInput />
+              <ForgotPassword />
               <EnterButton />
+              <NewUser />
             </View>
           </View>
         </ScrollView>
@@ -62,12 +59,14 @@ const styles = StyleSheet.create({
   },
   topo: {
     alignItems: "center",
-    marginBottom: 90,             
+    marginBottom: 200,             
   },
   corpo: {
     gap: 24,                     
   },
   formGroup: {
+    alignItems: 'center',
+
     gap: 16,                     
   },
 });

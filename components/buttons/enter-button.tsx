@@ -22,7 +22,7 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
 
-    minWidth: 300,
+    minWidth: 330,
     height: 50,
 
     borderRadius: 15,
