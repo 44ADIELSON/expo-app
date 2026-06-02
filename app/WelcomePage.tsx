@@ -1,6 +1,6 @@
 import {Image, View, StyleSheet } from "react-native";
 
-import { ExploreButton } from "../components/buttons/explore-button";
+import { ExploreButton } from "../components/buttons/ExploreButton";
 
 const WellScreen = () => {
   return (

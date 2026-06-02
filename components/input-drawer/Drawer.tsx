@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ViewStyle, ScrollView } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
@@ -22,12 +20,10 @@ export const VisibilityOptions: React.FC<Props> = ({ latitude = -9.48, longitude
   const days = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
 
   useEffect(() => {
-    // Busca os horários ao montar e quando as coordenadas mudam
     fetchSunTimes();
   }, [latitude, longitude]);
 
   useEffect(() => {
-    // pequeno loading visual ao alternar modo
     setLoading(true);
     const t = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(t);
@@ -46,12 +42,9 @@ export const VisibilityOptions: React.FC<Props> = ({ latitude = -9.48, longitude
       const res = await fetch(url.href);
       const dados = await res.json();
 
-      console.log('Open-Meteo daily:', dados?.daily);
-
       const NascerArray = dados?.daily?.sunrise ?? [];
       const PorArray = dados?.daily?.sunset ?? [];
       const rawWCodes = dados?.daily?.weathercode ?? [];
-      console.log('raw weathercode:', rawWCodes);
       const WCodes: number[] = (rawWCodes || []).map((v: any) => Number(v)).filter((n: number) => Number.isFinite(n));
 
       const now = new Date();
@@ -89,15 +82,11 @@ export const VisibilityOptions: React.FC<Props> = ({ latitude = -9.48, longitude
       if (nextSunriseDate) setSunriseTime(formatFromDate(nextSunriseDate));
       if (nextSunsetDate) setSunsetTime(formatFromDate(nextSunsetDate));
 
-      // map weather codes to icons for the upcoming days
       const mapCodeToIcon = (code: number) => {
-        // Based on WMO weather interpretation codes
-        // Use generic, valid MaterialCommunityIcons names
         if (code === 0) return 'weather-sunny';
         if (code === 1 || code === 2) return 'weather-partly-cloudy';
         if (code === 3) return 'weather-cloudy';
         if (code >= 45 && code <= 48) return 'weather-fog';
-        // drizzle/light rain -> use generic rainy icon
         if (code >= 51 && code <= 57) return 'weather-rainy';
         if (code >= 61 && code <= 67) return 'weather-rainy';
         if (code >= 71 && code <= 77) return 'weather-snowy';
@@ -108,12 +97,8 @@ export const VisibilityOptions: React.FC<Props> = ({ latitude = -9.48, longitude
 
       if (WCodes && WCodes.length > 0) {
         const icons = WCodes.slice(0, days.length).map((c) => mapCodeToIcon(c));
-        // if fewer codes than days, fill with default icons
         while (icons.length < days.length) icons.push('weather-cloudy');
-        console.log('mapped icons:', icons);
         setIconsForDays(icons);
-      } else {
-        console.log('no weathercodes or empty array');
       }
     } catch (error) {
       console.log('Erro fetchSunTimes:', error);
@@ -250,15 +235,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '700',
   },
-  iconPlaceholder: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-  },
-  iconSelected: {
-    backgroundColor: '#ffffff',
-  },
   infoRow: {
     paddingVertical: 8,
     paddingHorizontal: 6,
@@ -269,3 +245,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 });
+
+export default VisibilityOptions;

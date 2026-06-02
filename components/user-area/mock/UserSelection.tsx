@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
-import UserCard from "./user-card";
+import UserCard from "./UserCard";
 
 type User = {
   nome: string;
@@ -9,7 +9,7 @@ type User = {
   lon?: number;
 };
 
-const SelecaoPerfil = () => {
+const UserSelection = () => {
   const [dados, SetDados] = useState<User[]>([]);
 
   const getUsers = async () => {
@@ -51,4 +51,4 @@ const estilos = StyleSheet.create({
   },
 });
 
-export default SelecaoPerfil;
+export default UserSelection;

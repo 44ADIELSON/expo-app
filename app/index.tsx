@@ -2,7 +2,7 @@ import React from "react";
 
 import { View, StyleSheet } from "react-native";
 
-import WellScreen from "./well";
+import WellScreen from "./WelcomePage";
 
 export default function Home() {
   return (

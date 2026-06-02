@@ -9,7 +9,7 @@ export const EnterButton = () => {
     <View>
       <Pressable
         style={estilos.EnterButton}
-        onPress={() => router.navigate("/userHome")}
+        onPress={() => router.navigate("/HomePage")}
       >
         <Text style={estilos.EnterButtonText}>Entrar</Text>
       </Pressable>

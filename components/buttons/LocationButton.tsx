@@ -3,33 +3,25 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  ActivityIndicator,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import * as Location from "expo-location";
 
-interface ClimaTeste {
-  daily: { sunrise: string[]; sunset: string[] };
-}
-
 export const LocationButton = () => {
-  const [erro, setErro] = useState<string>("");
-
   const ObterLocalizacao = async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        return setErro("Permissão negada.");
+        console.log("Permissão negada.");
+        return;
       }
 
       const {
         coords: { latitude: lat, longitude: lon },
       } = await Location.getCurrentPositionAsync({});
-      
-      // Aqui você já tem as coordenadas (lat e lon) para usar
-      console.log("Coordenadas:", lat, lon);
 
+      console.log("Coordenadas:", lat, lon);
     } catch (error) {
       console.log(error, "Falha!");
     }
@@ -61,14 +53,13 @@ const estilos = StyleSheet.create({
 
     marginBottom: 20,
 
-    //  Equivalente iOS
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 1, // 1px vertical
+      height: 1,
     },
-    shadowOpacity: 0.25, // rgba(0,0,0,0.25)
-    shadowRadius: 1, // 1px blur
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
 
     backgroundColor: "#DE9817",
 
@@ -78,7 +69,6 @@ const estilos = StyleSheet.create({
     color: "#593D09",
     fontSize: 15,
     fontWeight: "bold",
-
     textAlign: "center",
   },
 });

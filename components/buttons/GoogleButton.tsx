@@ -2,7 +2,7 @@ import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-export const ContinueWithGoogle = () => {
+export const GoogleButton = () => {
   return (
     <TouchableOpacity style={estilos.button} activeOpacity={0.7}>
       <AntDesign name="google" size={24} color="black" />

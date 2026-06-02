@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 
 interface TypeNewDateComponent {
-  label?: string; // Exemplo de propriedade opcional
+  label?: string;
 }
 
 export const NewDateComponent = ({}: TypeNewDateComponent) => {
@@ -42,3 +42,5 @@ const styles = StyleSheet.create({
     fontWeight: "300",
   },
 });
+
+export default NewDateComponent;

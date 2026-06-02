@@ -2,12 +2,12 @@ import { View, Text, StyleSheet } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-interface TypeLogoCreate {
+interface TypeLogo {
   iconColor?: string;
   textColor?: string;
 }
 
-export const LogoCreate = ({iconColor, textColor}: TypeLogoCreate) => {
+export const Logo = ({ iconColor, textColor }: TypeLogo) => {
   return (
     <View style={styles.View}>
       <Ionicons name="sunny" size={30} color={iconColor} />
@@ -33,3 +33,5 @@ const styles = StyleSheet.create({
     fontFamily: "System",
   },
 });
+
+export default Logo;

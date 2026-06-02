@@ -8,11 +8,11 @@ import {
   Keyboard,
 } from "react-native";
 
-import { UserInput } from "../components/input-area/user-name-input";
-import { EnterButton } from "../components/buttons/enter-button";
-import { LogoCreate } from "../components/LogoTipo";
-import {ForgotPassword} from '../components/buttons/forgot-password'
-import {NewUser} from '../components/buttons/new-user'
+import { UserInput } from "../components/inputs/UserInput";
+import { EnterButton } from "../components/buttons/EnterButton";
+import { Logo } from "../components/layout/Logo";
+import { ForgotPasswordButton } from '../components/buttons/ForgotPasswordButton'
+import { NewUserButton } from '../components/buttons/NewUserButton'
 
 const LoginScreen = () => {
   const color = 'black';
@@ -29,15 +29,15 @@ const LoginScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.topo}>
-            <LogoCreate iconColor="#000000" textColor="#000000" />
+            <Logo iconColor="#000000" textColor="#000000" />
           </View>
 
           <View style={styles.corpo}>
             <View style={styles.formGroup}>
               <UserInput />
-              <ForgotPassword />
+              <ForgotPasswordButton />
               <EnterButton />
-              <NewUser />
+              <NewUserButton />
             </View>
           </View>
         </ScrollView>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   topo: {
     alignItems: "center",
-    marginBottom: 200,             
+    marginBottom: 185,             
   },
   corpo: {
     gap: 24,                     

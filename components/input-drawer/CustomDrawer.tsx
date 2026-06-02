@@ -51,10 +51,8 @@ export const CustomDrawer = ({
         const now = new Date();
 
         const parseISOToLocal = (iso: string) => {
-          // iso may be like 2026-05-29T05:31:00+00:00 or 2026-05-29T05:31Z
           const [datePart, timePartWithZone] = iso.split('T');
           if (!datePart || !timePartWithZone) return null;
-          // remove timezone offset if present and trailing Z
           const timePart = timePartWithZone.split(/[+-]/)[0].replace(/Z$/, '');
           const [year, month, day] = datePart.split('-').map(Number);
           const [hourStr, minuteStr] = timePart.split(':');
@@ -143,7 +141,7 @@ export const CustomDrawer = ({
   );
 };
 
-export { VisibilityOptions } from './drawer';
+export { VisibilityOptions } from './Drawer';
 
 const styles = StyleSheet.create({
   View: {
@@ -181,3 +179,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
+
+export default CustomDrawer;

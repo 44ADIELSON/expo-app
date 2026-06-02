@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from "react-native";
-import { LogoCreate } from "../components/LogoTipo";
-import { CustomDrawer, VisibilityOptions } from "../components/input-drawer/custom-drawer";
-import { NewDateComponent } from "../components/new-date-component";
-import { ExitButton } from "../components/buttons/exit-button";
+import { Logo } from "../components/layout/Logo";
+import { CustomDrawer, VisibilityOptions } from "../components/input-drawer/CustomDrawer";
+import { NewDateComponent } from "../components/layout/NewDateComponent";
+import { ExitButton } from "../components/buttons/ExitButton";
 
-import SelecaoPerfil from "../components/user-area/mock/user-selection";
+import UserSelection from "../components/user-area/mock/UserSelection";
 
 /* @hide */
 import * as Device from "expo-device";
@@ -84,10 +84,10 @@ export default function App() {
         style={styles.background}
       >
         <View style={[{ marginTop: 25 }]}>
-          <LogoCreate iconColor="#F8B03E" textColor="#ffffff" />
+          <Logo iconColor="#F8B03E" textColor="#ffffff" />
         </View>
         <View style={[styles.ViewTop, { flexDirection: "row" }]}>
-          <SelecaoPerfil />
+          <UserSelection />
           <ExitButton />
         </View>
         <View style={styles.contentContainer}>
