@@ -13,9 +13,12 @@ import { EnterButton } from "../components/buttons/EnterButton";
 import { Logo } from "../components/layout/Logo";
 import { ForgotPasswordButton } from '../components/buttons/ForgotPasswordButton'
 import { NewUserButton } from '../components/buttons/NewUserButton'
+import React, { useState } from 'react';
+import ForgotPasswordModal from '../components/popups/ForgotPasswordModal';
 
 const LoginScreen = () => {
   const color = 'black';
+  const [isForgotVisible, setForgotVisible] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -35,13 +38,14 @@ const LoginScreen = () => {
           <View style={styles.corpo}>
             <View style={styles.formGroup}>
               <UserInput />
-              <ForgotPasswordButton />
+              <ForgotPasswordButton onPress={() => setForgotVisible(true)} />
               <EnterButton />
               <NewUserButton />
             </View>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
+      <ForgotPasswordModal visible={isForgotVisible} onDismiss={() => setForgotVisible(false)} />
     </KeyboardAvoidingView>
   );
 };

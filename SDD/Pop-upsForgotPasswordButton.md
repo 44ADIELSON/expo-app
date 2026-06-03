@@ -5,7 +5,7 @@
 - **Exibir um Pop-up sobre a tela solicitando confirmação para a redefinição de senha**
 - **O pop-up deve ser simples, seguro e focar em reduzir a frustração do usuário**
 
-## 2. Ferramentas e Tecnologias
+## 0. Ferramentas e Tecnologias
 
 - **React Native** (Framework base)
 - **React Native Paper** ou Biblioteca de componentes uteis.
@@ -13,7 +13,22 @@
 - **TypeScript** (Tipagem estática)
 - **Firebase** (Futura integração de autenticação e banco de dados)
 
+## 0.1 Regras de Segurança e Negócio (Critérios de Aceitação)
+
+Para que a funcionalidade seja considerada concluída, as seguintes regras devem ser estritamente cumpridas:
+
+- **Prevenção contra Enumeração:** O sistema nunca deve retornar um erro específico informando "E-mail não encontrado" ou "Usuário inexistente". O feedback de sucesso deve ser sempre genérico (ex: "Se o e-mail existir em nossa base...") para proteger a privacidade dos usuários e evitar ataques de descoberta de contas.
+
+- **Sanitização de Input:** Assim como aplicado na tela de registro (RegisterScreen), o input do pop-up deve remover ativamente quaisquer espaços em branco digitados pelo usuário e forçar a formatação para letras minúsculas (lowercase) automaticamente antes da validação ou envio.
+
 ## 1. Experiência do Usuário (UX)
+
+### 1.0 Comportamento de Teclado
+- **Comportamento de Teclado:** A experiência do usuário deve incluir um comportamento adequado utilizando o KeyboardAvoidingView. É obrigatório envolver o conteúdo do modal em um componente de gerenciamento de teclado (como o ScrollView aliado ao KeyboardAvoidingView) para evitar sobreposição dos inputs e botões pelo teclado nativo, especialmente em telas menores.
+
+- **Acessibilidade (A11y):** O botão de fechar ("X") no pop-up deve ter um hitSlop (área de toque expandida) mínimo de { top: 10, bottom: 10, left: 10, right: 10 } para atingir a meta de 44x44 pixels recomendada pelas diretrizes de acessibilidade.
+
+- **Garantir que o foco do leitor de tela (VoiceOver/TalkBack) seja movido imediatamente para o conteúdo do pop-up assim que ele for aberto.**
 
 - **Campo único:** Solicite apenas o e-mail ou o nome de usuário cadastrado.
   - _Nota de Implementação:_ Como o Firebase será integrado futuramente, implemente apenas a validação em memória local. Componente Oco (_mock_).
@@ -454,3 +469,50 @@ fontSize: 12,
 });
 
 export default RegisterScreen;
+
+## 2. Estrutura do Componente e Visibilidade
+
+- **Base do Componente:** Utilizar obrigatoriamente o <Modal> do React Native Paper (integrado ao <Portal>) como base do componente para garantir sobreposição correta sobre a tela de Login.
+
+- **Controle de Visibilidade:** O estado que controla se o pop-up está aberto ou fechado deve ser gerenciado localmente dentro de LoginScreen utilizando um hook simples de estado (ex: const [isForgotPasswordVisible, setForgotPasswordVisible] = useState(false)). O modal deve ser fechável ao clicar fora de sua área útil (comportamento dismissable).
+
+## 3. Estados da Interface (UI States)
+
+O pop-up deve gerenciar e refletir claramente os seguintes estados de interface para o usuário:
+
+- **Estado Inicial:**
+
+- **Estado de Carregamento (Loading):**
+
+- **Estado de Erro:** Caso o e-mail seja inválido no formato, reutilizar o padrão do componente HelperText em vermelho, exibindo a mensagem de erro logo abaixo do input (validação feita por Regex local).
+
+Estado de Sucesso (Mock):Ao passar pela validação, substituir o input por uma mensagem de confirmação em texto (Exemplo: "Se o e-mail existir em nossa base, você receberá um link em breve.") e mudar o texto do botão principal de ação para "Fechar".
+
+  - **Nota: Como a parte de banco de dados (Firebase) ainda não foi adicionada ao projeto, este estado deve ser simulado (mock) após 1 a 2 segundos de carregamento para testes de interface.**
+
+---
+
+**Últimos Ajustes Implementados**
+
+- **Componente (adicionado):** [components/popups/ForgotPasswordModal.tsx](components/popups/ForgotPasswordModal.tsx) — Modal implementado com `Portal`/`Modal` do `react-native-paper`, `KeyboardAvoidingView` + `ScrollView`, borda `borderRadius: 15`, sanitização em tempo real (remove espaços e força lowercase), validação local por regex, mock de envio (1.5s) e foco automático no input ao abrir.
+
+- **Botão (refatorado):** [components/buttons/ForgotPasswordButton.tsx](components/buttons/ForgotPasswordButton.tsx) — agora aceita `onPress` para abrir o modal; mantive o `Link` como fallback para navegação estática.
+
+- **Integração:** [app/CredentialsPage.tsx](app/CredentialsPage.tsx) — adicionado estado `isForgotVisible` e renderização de `ForgotPasswordModal`; o `ForgotPasswordButton` é chamado com `onPress` para abrir o pop-up.
+
+- **Provider (corrigido):** [app/_layout.tsx](app/_layout.tsx) — envolvi a árvore de navegação com `Provider` do `react-native-paper` (necessário para `Portal`/`Modal`).
+
+- **Estética e consistência:** os botões do modal foram refatorados para usar `Pressable` com estilos consistentes (`backgroundColor: #242440`, `color: #f3f3ff`, `borderRadius: 15`, altura mínima e letterSpacing), e é exibido um `ActivityIndicator` durante o estado de loading.
+
+- **Acessibilidade & Segurança:** o botão de fechar "X" possui `hitSlop` mínimo `{ top: 10, bottom: 10, left: 10, right: 10 }`; o feedback permanece genérico para prevenção de enumeração de contas.
+
+- **Assunções tomadas:** o envio de reset permanece em mock (sem integração Firebase); a alteração do `ForgotPasswordButton` para `onPress` foi aplicada conforme aprovado; mantive cores e tipografia do design existente.
+
+- **Como testar rapidamente:**
+  - Rode o app (`npm start`) e abra a tela de login.
+  - Toque em "Esqueceu a senha"; o modal deve abrir com foco no input.
+  - Insira um e-mail malformado → HelperText de erro deve aparecer.
+  - Insira um e-mail válido → botão mostra loading por ~1.5s e então exibe a mensagem genérica de sucesso; botão principal muda para "Fechar".
+
+Se quiser que eu abra um branch/PR com essas mudanças, eu crio e envio. Caso contrário, posso ajustar textos ou tempos do mock conforme preferir.
+
