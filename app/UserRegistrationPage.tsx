@@ -86,7 +86,7 @@ const RegisterScreen = () => {
                   placeholder="Ex: email@exemplo.com"
                   value={email}
                   onChangeText={(text) => {
-                    setEmail(text.replace(/\s/g, "")); // Sanitização em tempo real de espaços
+                    setEmail(text.replace(/\s/g, ""));
                     setEmailError(null);
                   }}
                   keyboardType="email-address"
