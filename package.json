@@ -6,7 +6,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:unit": "jest --runInBand",
+    "e2e:build": "npx detox build -c android.emu.debug",
+    "e2e:test": "npx detox test -c android.emu.debug"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -33,4 +38,11 @@
     "typescript": "~5.9.2"
   },
   "private": true
+  ,
+  "jest": {
+    "preset": "jest-expo",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/setupTests.js"],
+    "transformIgnorePatterns": ["node_modules/(?!(react-native|@react-native|expo|react-navigation)/)" ]
+  }
 }
