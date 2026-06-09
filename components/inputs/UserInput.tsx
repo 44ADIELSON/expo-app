@@ -1,39 +1,61 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { useState } from "react";
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
 
-export const UserInput = () => {
-  const [ocultarSenha, setOcultarSenha] = useState(true);
+type Props = {
+  label?: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  placeholder?: string;
+  keyboardType?: any;
+  secureTextEntry?: boolean;
+  error?: boolean;
+  onSubmitEditing?: () => void;
+  returnKeyType?: any;
+  disabled?: boolean;
+};
+
+export const UserInput = ({
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  keyboardType,
+  secureTextEntry,
+  error,
+  onSubmitEditing,
+  returnKeyType,
+  disabled,
+}: Props) => {
+  const [ocultarSenha, setOcultarSenha] = useState(!!secureTextEntry);
 
   return (
-    <View style={styles.ViewAll}>
+    <View style={styles.ViewAll} pointerEvents={disabled ? "none" : "auto"}>
       <TextInput
         mode="outlined"
-        label="Endereço de e-mail"
-        placeholder="Ex: email@exemplo.com"
+        label={label}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={onChangeText}
         style={styles.input}
         outlineStyle={styles.inputOutline}
         textColor="#000"
         activeOutlineColor="#6200ee"
-      />
-
-      <TextInput
-        mode="outlined"
-        label="Digite sua senha"
-        secureTextEntry={ocultarSenha}
+        keyboardType={keyboardType}
+        editable={!disabled}
         autoCapitalize="none"
         autoCorrect={false}
-        textContentType="password"
-        style={styles.input}
-        outlineStyle={styles.inputOutline}
-        textColor="#000"
-        activeOutlineColor="#6200ee"
+        error={!!error}
+        onSubmitEditing={onSubmitEditing}
+        returnKeyType={returnKeyType}
+        secureTextEntry={secureTextEntry && ocultarSenha}
         right={
-          <TextInput.Icon
-            icon={ocultarSenha ? "eye" : "eye-off"}
-            onPress={() => setOcultarSenha(!ocultarSenha)}
-          />
+          secureTextEntry ? (
+            <TextInput.Icon
+              icon={ocultarSenha ? "eye" : "eye-off"}
+              onPress={() => setOcultarSenha(!ocultarSenha)}
+            />
+          ) : undefined
         }
       />
     </View>

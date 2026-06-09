@@ -1,17 +1,20 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-import { useRouter } from "expo-router";
+type Props = {
+  onPress?: () => void;
+  disabled?: boolean;
+  title?: string;
+};
 
-export const EnterButton = () => {
-  const router = useRouter();
-
+export const EnterButton = ({ onPress, disabled, title = "Entrar" }: Props) => {
   return (
     <View>
       <Pressable
-        style={estilos.EnterButton}
-        onPress={() => router.navigate("/HomePage")}
+        style={[estilos.EnterButton, disabled ? estilos.disabled : null]}
+        onPress={onPress}
+        disabled={!!disabled}
       >
-        <Text style={estilos.EnterButtonText}>Entrar</Text>
+        <Text style={estilos.EnterButtonText}>{title}</Text>
       </Pressable>
     </View>
   );
@@ -49,5 +52,9 @@ const estilos = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     letterSpacing: 5
+  },
+  disabled: {
+    backgroundColor: "#9e9ea8",
+    opacity: 0.8,
   },
 });

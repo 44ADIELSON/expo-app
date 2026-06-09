@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~54.0.33",
     "expo-device": "~8.0.10",
     "expo-linking": "~8.0.12",
@@ -37,12 +38,15 @@
     "@types/react": "~19.1.0",
     "typescript": "~5.9.2"
   },
-  "private": true
-  ,
+  "private": true,
   "jest": {
     "preset": "jest-expo",
     "testEnvironment": "node",
-    "setupFilesAfterEnv": ["<rootDir>/setupTests.js"],
-    "transformIgnorePatterns": ["node_modules/(?!(react-native|@react-native|expo|react-navigation)/)" ]
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|@react-native|expo|react-navigation)/)"
+    ]
   }
 }
