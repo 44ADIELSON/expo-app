@@ -40,7 +40,6 @@ const LoginScreen = () => {
   const lockTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // load persisted attempts/lock
     (async () => {
       try {
         const attemptsRaw = await AsyncStorage.getItem(STORAGE_KEYS.ATTEMPTS);

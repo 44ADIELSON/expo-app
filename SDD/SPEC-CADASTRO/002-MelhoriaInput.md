@@ -48,7 +48,7 @@
 - Caracteres acentuados ou símbolos especiais devem ser bloqueados.
 - **Sensibilidade a maiúsculas/minúsculas:** O sistema deve ser *case-insensitive* (ex: `Exemplo@email.com` e `exemplo@email.com` devem ser tratados como o mesmo endereço).
 
-### Especificação técnica de validação de e-mail
+## 2.2. Especificação técnica de validação de e-mail
 
 - Limite máximo: 254 caracteres (endereços maiores são inválidos).
 - Normalização: aplicar `String.prototype.normalize('NFC')` e `trim()` antes da validação; usar `toLowerCase()` apenas para comparação/lookup, não para armazenar a senha.
@@ -60,7 +60,7 @@
 
 - Permitir `+` (plus-addressing) e pontos no local-part; bloquear caracteres Unicode/acentuados no local-part para manter compatibilidade conforme critério do produto (documentar se for necessário suportar IDN/punycode).
 
-### Validação de senha (login)
+## 2.3. Validação de senha (login)
 
 - Não aplicar `trim()` por padrão; tratar espaços como parte válida da senha.
 - `secureTextEntry` habilitado e `textContentType="password"` configurado.
@@ -88,7 +88,7 @@
 
 - Somar uma quantidade de tentativas de disparos com erros de e-mail e senha armazenando o valor em uma variavel ou estado até o valor 5. O Input de e-mail e senha devem deixar de receber textos ou alguma ferramenta nativa do react-native/expo/ ou metodo que torne possível que o usuario seja impedido de continuar tentando. 
 
-### Política de tentativas e bloqueio (detalhada)
+### 4.1. Política de tentativas e bloqueio (detalhada)
 
 - Contador local: incrementar em cada tentativa de login falhada (e-mail inválido ou senha incorreta).
 - Limite: 5 tentativas inválidas consecutivas.
@@ -97,23 +97,23 @@
 - Server-side: obrigar implementação de rate-limiting / lockout no back-end. Bloqueio apenas no cliente é insuficiente contra ataques.
 - Reset do contador: após um login bem-sucedido ou após expirar o cooldown.
 
-### UX e mensagens
+### 4.2. UX e mensagens
 
 - Mensagens de erro genéricas para não vazar informação sensível: ex.: `Usuário ou senha incorretos.`
 - Indicar número de tentativas restantes: `Você tem 2 tentativas restantes antes do bloqueio.`
 - Ao bloquear: `Muitas tentativas. Tente novamente em 5 minutos ou recupere sua senha.`
 
-### Acessibilidade
+### 4.3. Acessibilidade
 
 - Garantir `accessibilityLabel` e anotações ARIA equivalentes para mensagens de erro.
 - Anunciar bloqueio e mensagens de erro via leitor de tela.
 
-### Segurança e Observabilidade
+### 4.4. Segurança e Observabilidade
 
 - Não confiar somente no client-side; registrar e limitar tentativas no servidor por IP/conta.
 - Registrar eventos (falhas de login, bloqueios) para monitoramento.
 
-### Testes mínimos a incluir na spec
+### 4.5. Testes mínimos a incluir na spec
 
 - Validação de e-mail: aceitar `user.name+tag@example.com`; rejeitar `user@@example.com` e entradas com acentuação quando proibidas.
 - Tamanho: rejeitar e-mails com >254 chars.
@@ -121,10 +121,8 @@
 - Enter/Submit: Enter não submete se campos inválidos; submete quando válidos.
 - Bloqueio: após 5 falhas, campos desabilitados, cooldown 5 minutos e persistência após reinício.
 
-### Configurabilidade
+### 4.6. Configurabilidade
 
 - Valores (tentativas, duração do bloqueio, regex) devem ser constantes configuráveis no código para facilitar ajustes sem alterar lógica.
 
 ---
-
-Seções adicionadas: especificação de regex, regra de 254 chars, normalização, política de bloqueio com persistência e recomendações de servidor, mensagens UX, acessibilidade e casos de teste mínimos.
