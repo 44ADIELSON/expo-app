@@ -25,6 +25,9 @@ import {
   COOLDOWN_MS,
   STORAGE_KEYS,
 } from "../utils/authConfig";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import { ActivityIndicator } from 'react-native';
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -38,6 +41,7 @@ const LoginScreen = () => {
   const [attempts, setAttempts] = useState(0);
   const [lockedUntil, setLockedUntil] = useState<number | null>(null);
   const lockTimerRef = useRef<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -138,14 +142,22 @@ const LoginScreen = () => {
       return;
     }
 
-    // NOTE: Aqui deveria haver chamada ao servidor para autenticação.
-    // Como exemplo, consideramos sucesso caso email e senha não vazios e email válido.
-    // Ao sucesso, resetar contador e navegar.
-    await AsyncStorage.removeItem(STORAGE_KEYS.ATTEMPTS);
-    await AsyncStorage.removeItem(STORAGE_KEYS.LOCK_UNTIL);
-    setAttempts(0);
-    setLockedUntil(null);
-    router.push("/HomePage");
+    // Autenticação com Firebase
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, sanitizedEmail.toLowerCase(), password);
+      await AsyncStorage.removeItem(STORAGE_KEYS.ATTEMPTS);
+      await AsyncStorage.removeItem(STORAGE_KEYS.LOCK_UNTIL);
+      setAttempts(0);
+      setLockedUntil(null);
+      router.push("/HomePage");
+    } catch (e: any) {
+      // Mapear erros e mostrar mensagem genérica ao usuário
+      setGeneralError('E-mail ou senha inválidos');
+      await handleFailedAttempt();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const remainingMs = lockedUntil ? Math.max(0, lockedUntil - Date.now()) : 0;
@@ -201,7 +213,7 @@ const LoginScreen = () => {
               ) : null}
 
               <ForgotPasswordButton onPress={() => setForgotVisible(true)} />
-              <EnterButton onPress={handleSubmit} disabled={isLocked || !email || !password || !!emailError} />
+              <EnterButton onPress={handleSubmit} disabled={isLocked || !email || !password || !!emailError} loading={loading} />
               <NewUserButton />
             </View>
           </View>

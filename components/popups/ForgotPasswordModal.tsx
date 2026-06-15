@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Portal, Modal, TextInput, HelperText } from "react-native-paper";
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 
 type Props = {
   visible: boolean;
@@ -50,7 +52,7 @@ const ForgotPasswordModal: React.FC<Props> = ({ visible, onDismiss }) => {
     return null;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setError(null);
     const sanitized = sanitize(email);
     const v = validateFormat(sanitized);
@@ -60,11 +62,15 @@ const ForgotPasswordModal: React.FC<Props> = ({ visible, onDismiss }) => {
     }
 
     setLoading(true);
-    // Mock: simula requisição e não revela existência de conta
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await sendPasswordResetEmail(auth, sanitized);
       setSuccess(true);
-    }, 1500);
+    } catch (e) {
+      // Não revelar se conta existe — mensagens genéricas
+      setError('Erro ao enviar o e-mail. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClose = () => {

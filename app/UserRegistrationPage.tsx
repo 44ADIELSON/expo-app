@@ -13,6 +13,10 @@ import { TextInput, HelperText } from "react-native-paper";
 import { Logo } from "../components/layout/Logo";
 import { RegisterActionButton } from "../components/buttons/RegisterActionButton";
 import { validateEmail, validatePassword } from "../utils/validators";
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import { ActivityIndicator } from 'react-native';
+import { useRouter } from 'expo-router';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
@@ -53,12 +57,24 @@ const RegisterScreen = () => {
     }
 
     if (!hasError) {
-      // Futura integração com Firebase Auth:
-      // createUserWithEmailAndPassword(auth, email.trim(), password)
-      console.log("Validação concluída com sucesso. Submetendo dados...");
-      alert("Cadastro realizado com sucesso (Mock)!");
+      setLoading(true);
+      (async () => {
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
+          await updateProfile(cred.user, { displayName: email.split('@')[0] });
+          router.push('/HomePage');
+        } catch (e: any) {
+          if (e.code === 'auth/email-already-in-use') setEmailError('E-mail já cadastrado');
+          else setPasswordError('Erro ao criar conta');
+        } finally {
+          setLoading(false);
+        }
+      })();
     }
   };
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -171,7 +187,7 @@ const RegisterScreen = () => {
               </View>
 
               {/* Botão de Submissão */}
-              <RegisterActionButton onPress={handleRegister} />
+              <RegisterActionButton onPress={handleRegister} loading={loading} />
             </View>
           </View>
         </ScrollView>

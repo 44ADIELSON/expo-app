@@ -1,12 +1,23 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 
 export const ExitButton = () => {
   const router = useRouter();
 
+  const handleExit = async () => {
+    try {
+      await signOut(auth);
+    } catch (e) {
+      // ignore
+    }
+    router.replace('/CredentialsPage');
+  };
+
   return (
     <View>
-      <Pressable style={estilos.ExitButton} onPress={() => router.back()}>
+      <Pressable style={estilos.ExitButton} onPress={handleExit}>
         <Text style={estilos.ExitButtonText}>Sair</Text>
       </Pressable>
     </View>

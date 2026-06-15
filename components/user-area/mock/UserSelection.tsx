@@ -1,43 +1,33 @@
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import UserCard from "./UserCard";
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../../firebaseConfig';
 
 type User = {
   nome: string;
   foto: string;
-  lat?: number;
-  lon?: number;
 };
 
 const UserSelection = () => {
-  const [dados, SetDados] = useState<User[]>([]);
-
-  const getUsers = async () => {
-    try {
-      const response = await fetch(
-        "https://randomuser.me/api/?results=1&nat=br&gender=female",
-      );
-      const dados = await response.json();
-
-      const metMAP = dados.results.map((d: any) => ({
-        nome: d.name.first,
-        foto: d.picture.large,
-      }));
-      SetDados(metMAP);
-    } catch (error) {
-      console.log("Algo saiu mal", error);
-    }
-  };
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUsers();
+    const unsub = onAuthStateChanged(auth, (u) => {
+      if (u) {
+        setUser({ nome: u.displayName || 'Usuário', foto: u.photoURL || '' });
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsub();
   }, []);
 
   return (
     <View>
-      {dados.length > 0 && (
+      {user && (
         <View style={estilos.item}>
-          <UserCard nome={dados[0].nome} foto={dados[0].foto} />
+          <UserCard nome={user.nome} foto={user.foto} />
         </View>
       )}
     </View>

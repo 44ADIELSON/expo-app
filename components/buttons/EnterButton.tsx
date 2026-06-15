@@ -1,20 +1,25 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native";
 
 type Props = {
   onPress?: () => void;
   disabled?: boolean;
   title?: string;
+  loading?: boolean;
 };
 
-export const EnterButton = ({ onPress, disabled, title = "Entrar" }: Props) => {
+export const EnterButton = ({ onPress, disabled, title = "Entrar", loading = false }: Props) => {
   return (
     <View>
       <Pressable
         style={[estilos.EnterButton, disabled ? estilos.disabled : null]}
         onPress={onPress}
-        disabled={!!disabled}
+        disabled={!!disabled || loading}
       >
-        <Text style={estilos.EnterButtonText}>{title}</Text>
+        {loading ? (
+          <ActivityIndicator color="#f3f3ff" />
+        ) : (
+          <Text style={estilos.EnterButtonText}>{title}</Text>
+        )}
       </Pressable>
     </View>
   );

@@ -1,11 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native";
 
 interface RegisterActionButtonProps {
   onPress: () => void;
+  loading?: boolean;
 }
 
-export const RegisterActionButton = ({ onPress }: RegisterActionButtonProps) => {
+export const RegisterActionButton = ({ onPress, loading = false }: RegisterActionButtonProps) => {
   return (
     <View style={styles.viewContainer}>
       <Pressable
@@ -14,8 +15,9 @@ export const RegisterActionButton = ({ onPress }: RegisterActionButtonProps) => 
           pressed && { opacity: 0.8 }
         ]}
         onPress={onPress}
+        disabled={loading}
       >
-        <Text style={styles.buttonText}>Cadastrar</Text>
+        {loading ? <ActivityIndicator color="#f3f3ff" /> : <Text style={styles.buttonText}>Cadastrar</Text>}
       </Pressable>
     </View>
   );
