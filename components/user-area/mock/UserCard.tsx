@@ -3,11 +3,25 @@ import { useRouter } from "expo-router";
 
 interface User  {
   nome?: string;
-  foto?: string;
+  foto?: string | null;
 };
 
 const UserCard = ({ nome, foto }: User) => {
   const router = useRouter();
+
+  const renderAvatar = () => {
+    if (foto) {
+      return <Image style={estilos.foto} source={{ uri: foto }} />;
+    }
+
+    // Placeholder: círculo com iniciais
+    const initials = nome ? nome.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() : 'U';
+    return (
+      <View style={estilos.placeholder}>
+        <Text style={estilos.placeholderText}>{initials}</Text>
+      </View>
+    );
+  };
 
   return (
     <View>
@@ -17,7 +31,7 @@ const UserCard = ({ nome, foto }: User) => {
       >
         <View style={estilos.View}>
           <View>
-            <Image style={estilos.foto} source={{ uri: foto }} />
+            {renderAvatar()}
           </View>
           <View>
             <Text style={estilos.nome}>Olá, {nome}</Text>
@@ -49,6 +63,18 @@ const estilos = StyleSheet.create({
     width: 50,
     height: 50,
     objectFit: "cover",
+  },
+  placeholder: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#9e9ea8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  placeholderText: {
+    color: '#fff',
+    fontWeight: '700',
   },
 });
 

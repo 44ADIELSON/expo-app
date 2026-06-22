@@ -6,7 +6,7 @@ import { auth } from '../../../firebaseConfig';
 
 type User = {
   nome: string;
-  foto: string;
+  foto?: string | null;
 };
 
 const UserSelection = () => {
@@ -15,7 +15,7 @@ const UserSelection = () => {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       if (u) {
-        setUser({ nome: u.displayName || 'Usuário', foto: u.photoURL || '' });
+        setUser({ nome: u.displayName || 'Usuário', foto: u.photoURL || null });
       } else {
         setUser(null);
       }
